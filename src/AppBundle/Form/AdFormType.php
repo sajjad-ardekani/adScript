@@ -35,7 +35,7 @@ class AdFormType extends AbstractType {
     }
 
     public function getName() {
-        return 'app_ad_form';
+        return 'app_ad_form'; 
     }
 
 }
