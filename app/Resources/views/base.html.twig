@@ -8,7 +8,9 @@
     </head>
     <body>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+    <script type="text/javascript" src="{{ asset('js/jquery-2.1.4.min.js') }}"></script>
+        {% endblock %}
     </body>
 </html> 
 

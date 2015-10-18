@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,23 +20,26 @@ use Symfony\Component\Form\FormBuilderInterface;
 class AdFormType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
+
         $builder
                 ->add("title")
                 ->add("description")
                 ->add("city")
-                ->add("district", array('query_builder' => function(EntityRepository $er ) {
-                        return $er->createQueryBuilder('w')
-                                ->where('w.city = ?1')
-                                ->setParameter(1, $caravan);
-                    }))
+                ->add('district')
                 ->add("price")
                 ->add("categories")
                 ->add("email")
                 ->add("phonenumber");
     }
 
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
+            'clas_data' => "AppBundle/Entity/Ad"
+        ));
+    }
+
     public function getName() {
-        return 'app_ad_form';  
+        return 'app_ad_form';
     }
 
 }

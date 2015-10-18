@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * District
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\DistrictRepository")
  */
 class District {
 

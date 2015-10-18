@@ -1,14 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ form_start(form) }}
-
-    {{form_widget(form)}}<br>
-    {{form_row(form.city)}}<a id="city" href="">Load district</a>
-    <input type="submit" value="Add">
-    {{ form_end(form) }}
-
-    <p></p>
+    {% for di in dis %}
+        {{di.name}}
+    {%endfor%}
 {% endblock %}
 
 {% block stylesheets %}
@@ -43,39 +38,39 @@
     {{ parent() }}
     <script>
 
-{#        function displayVals() {
-            var singleValues = $("#app_ad_form_city").val();
-            $("#city").html(singleValues);
-            $("#city").attr("href", "{{path("show-district",{id : singleValues})}}");
-        }
-        $("select").change(displayVals);
-        displayVals();
+        {#        function displayVals() {
+                    var singleValues = $("#app_ad_form_city").val();
+                    $("#city").html(singleValues);
+                    $("#city").attr("href", "{{path("show-district",{id : singleValues})}}");
+                }
+                $("select").change(displayVals);
+                displayVals();
 
-#}
- jQuery(document).ready(function(){
+        #}
+        jQuery(document).ready(function () {
 
-                jQuery("select").change(function(){
-                    
-                    var value = jQuery("#app_ad_form_city").val();
-                    var url = "{{ path('show-district', {'id': 'cityId'}) }}";
-                    url = url.replace("cityId", value);
-                    $("#city").attr("href", url); 
-                    
-                    jQuery.ajax({
-                        
-                        url: url,
-                        timeout: 5000,
-                        success: function(data) { 
-                            alert("ok");
-                           
-                        },
-                        error: function() { alert ('mal');
-                        }
-                    });
+            jQuery("select").change(function () {
 
+                var value = jQuery("#app_ad_form_city").val();
+                var url = "{{ path('show-district', {'id': 'cityId'}) }}";
+                url = url.replace("cityId", value);
+                $("#city").attr("href", url);
+
+                jQuery.ajax({
+                    url: url,
+                    timeout: 5000,
+                    success: function (data) {
+                        alert("ok");
+
+                    },
+                    error: function () {
+                        alert('mal');
+                    }
                 });
 
-            });  
+            });
+
+        });
 
     </script>
 {% endblock %}
