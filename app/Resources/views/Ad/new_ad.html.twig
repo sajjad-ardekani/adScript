@@ -4,7 +4,7 @@
     {{ form_start(form) }}
 
     {{form_widget(form)}}<br>
-    {{form_row(form.city)}}<a id="city" href="">Load district</a>
+   
     <input type="submit" value="Add">
     {{ form_end(form) }}
 
@@ -42,40 +42,35 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+            jQuery(document).ready(function () {
 
-{#        function displayVals() {
-            var singleValues = $("#app_ad_form_city").val();
-            $("#city").html(singleValues);
-            $("#city").attr("href", "{{path("show-district",{id : singleValues})}}");
-        }
-        $("select").change(displayVals);
-        displayVals();
+                jQuery("#app_ad_form_city").change(function () {
 
-#}
- jQuery(document).ready(function(){
-
-                jQuery("select").change(function(){
-                    
                     var value = jQuery("#app_ad_form_city").val();
-                    var url = "{{ path('show-district', {'id': 'cityId'}) }}";
+                    var url = "{{ path('show-district', {'id': 'cityId','format':'json'}) }}";
                     url = url.replace("cityId", value);
-                    $("#city").attr("href", url); 
-                    
+                    $("#city").attr("href", url);
+
                     jQuery.ajax({
-                        
                         url: url,
                         timeout: 5000,
-                        success: function(data) { 
-                            alert("ok");
-                           
-                        },
-                        error: function() { alert ('mal');
-                        }
-                    });
+                        dataType: 'json',
+                        success: function (data) {
+                            var options;
+                            $.each(data, function (bb) {
+                                options += '<option value="' + data[bb].id + '">'  +   data[bb].name + '</option>';
+                                });
+                                  $("#app_ad_form_district").html(options);
 
-                });
+                                           },
+                                           error: function () {
+                                               alert('mal');
+                                           }
+                                       });
 
-            });  
+                                   });
+
+                               });
 
     </script>
 {% endblock %}

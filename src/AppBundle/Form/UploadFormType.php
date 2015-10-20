@@ -17,31 +17,24 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  *
  * @author diba
  */
-class AdFormType extends AbstractType {
+class UploadFormType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $builder
-                ->add("title")
-                ->add("description")
-                ->add("city")
-                ->add('district', "choice", array(
-                    'placeholder' => 'Choose an City',
-                ))
-                ->add("price")
-                ->add("categories")
-                ->add("email")
-                ->add("phonenumber");
+                ->add('file')
+                ->add('save', 'submit', array('label' => 'Add image'))
+        ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'clas_data' => "AppBundle/Entity/Ad"
+            'clas_data' => "AppBundle/Entity/Image"
         ));
     }
 
     public function getName() {
-        return 'app_ad_form';
+        return 'app_ad_upload_form';
     }
 
 }

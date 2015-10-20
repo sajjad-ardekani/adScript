@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% for di in dis %}
-        {{di.name}}
-    {%endfor%}
+    {{form_start(form)}}
+    {{form_widget(form)}}
+    {{form_end(form)}}
+    
+
 {% endblock %}
 
 {% block stylesheets %}
@@ -33,6 +35,4 @@
             .sf-toolbar { opacity: 0; -webkit-animation: fade-in 1s .2s forwards; animation: fade-in 1s .2s forwards;}
         }
     </style>
-{% endblock %}
-{% block javascripts %}
 {% endblock %}

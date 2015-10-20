@@ -7,6 +7,8 @@ use AppBundle\Form\AdFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class AdController extends Controller {
 
@@ -31,18 +33,46 @@ class AdController extends Controller {
                     'form' => $form->createView()
         ));
     }
-        /**
-     * @Route("/city/{id}", name="show-district")
-     */
-    public function showDistrictAction($id, Request $request) {
-        
+
+    public function showDistrictAction($id, $format, Request $request) {
         $em = $this->getDoctrine()->getManager();
+        
         $district = $em->getRepository("AppBundle:District")->queryOwnedBy($id);
-        
-        
-        return $this->render('ad/ajaxload.html.twig', array(
+        $serializer = $this->container->get('serializer');
+        if ($format == 'json') {
+            $response = new Response($serializer->serialize($district, 'json'));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
+
+
+
+        return $this->render('Ad/ajaxload.html.twig', array(
                     'dis' => $district
         ));
+    }
+
+    /**
+     * @Route("/upload", name="upload")
+     *
+     */
+    public function uploadAction(Request $request) {
+
+        $document = new \AppBundle\Entity\Image();
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new \AppBundle\Form\UploadFormType(), $document);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em->persist($document);
+            $em->flush();
+
+
+            return $this->redirectToRoute('upload');
+        }
+
+
+        return $this->render('ad/upload.html.twig', array('form' => $form->createView()));
     }
 
 }

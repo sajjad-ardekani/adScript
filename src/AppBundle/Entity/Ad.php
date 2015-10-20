@@ -90,20 +90,24 @@ class Ad {
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * */
     private $categories;
-        /**
+
+    /**
      * @ORM\ManyToOne(targetEntity="City", inversedBy="ads")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
      * */
     private $city;
+
     /**
      * @ORM\OneToMany(targetEntity="Image", mappedBy="ad")
-     * */
+     */
     private $images;
-           /**
+
+    /**
      * @ORM\ManyToOne(targetEntity="District", inversedBy="ads")
      * @ORM\JoinColumn(name="district_id", referencedColumnName="id")
      * */
     private $district;
+
     public function __construct() {
         $this->images = new ArrayCollection();
     }
@@ -375,7 +379,6 @@ class Ad {
         $this->creationDate = new \DateTime();
     }
 
-
     /**
      * Set city
      *
@@ -383,8 +386,7 @@ class Ad {
      *
      * @return Ad
      */
-    public function setCity(\AppBundle\Entity\City $city = null)
-    {
+    public function setCity(\AppBundle\Entity\City $city = null) {
         $this->city = $city;
 
         return $this;
@@ -395,8 +397,7 @@ class Ad {
      *
      * @return \AppBundle\Entity\City
      */
-    public function getCity()
-    {
+    public function getCity() {
         return $this->city;
     }
 
@@ -407,8 +408,7 @@ class Ad {
      *
      * @return Ad
      */
-    public function setDistrict(\AppBundle\Entity\District $district = null)
-    {
+    public function setDistrict(\AppBundle\Entity\District $district = null) {
         $this->district = $district;
 
         return $this;
@@ -419,8 +419,8 @@ class Ad {
      *
      * @return \AppBundle\Entity\District
      */
-    public function getDistrict()
-    {
+    public function getDistrict() {
         return $this->district;
     }
+
 }
