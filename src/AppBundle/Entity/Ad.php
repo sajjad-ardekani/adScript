@@ -107,6 +107,16 @@ class Ad {
      * @ORM\JoinColumn(name="district_id", referencedColumnName="id")
      * */
     private $district;
+    private $numberOfWheels;
+
+    /**
+     * Get numberOfWheels
+     *
+     * @return integer
+     */
+    public function getNumberOfWheels() {
+        return $this->numberOfWheels;
+    }
 
     public function __construct() {
         $this->images = new ArrayCollection();
@@ -422,5 +432,4 @@ class Ad {
     public function getDistrict() {
         return $this->district;
     }
-
 }

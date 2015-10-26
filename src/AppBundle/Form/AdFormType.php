@@ -25,13 +25,13 @@ class AdFormType extends AbstractType {
                 ->add("title")
                 ->add("description")
                 ->add("city")
-                ->add('district', "choice", array(
-                    'placeholder' => 'Choose an City',
-                ))
+                ->add('district')
                 ->add("price")
                 ->add("categories")
                 ->add("email")
-                ->add("phonenumber");
+                ->add("phonenumber")
+
+        ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {

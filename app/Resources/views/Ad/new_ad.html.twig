@@ -4,12 +4,15 @@
     {{ form_start(form) }}
 
     {{form_widget(form)}}<br>
-   
+
+
     <input type="submit" value="Add">
     {{ form_end(form) }}
 
     <p></p>
 {% endblock %}
+
+
 
 {% block stylesheets %}
     <style>
@@ -41,36 +44,42 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="https://rawgithub.com/blueimp/jQuery-File-Upload/master/js/vendor/jquery.ui.widget.js"></script>
+    <script type="text/javascript" src="https://rawgithub.com/blueimp/jQuery-File-Upload/master/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="https://rawgithub.com/blueimp/jQuery-File-Upload/master/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fine-uploader.min.js')}}"></script>
+
     <script>
-            jQuery(document).ready(function () {
+        jQuery(document).ready(function () {
 
-                jQuery("#app_ad_form_city").change(function () {
+            jQuery("#app_ad_form_city").change(function () {
 
-                    var value = jQuery("#app_ad_form_city").val();
-                    var url = "{{ path('show-district', {'id': 'cityId','format':'json'}) }}";
-                    url = url.replace("cityId", value);
-                    $("#city").attr("href", url);
+                var value = jQuery("#app_ad_form_city").val();
+                var url = "{{ path('show-district', {'id': 'cityId','format':'json'}) }}";
+                url = url.replace("cityId", value);
+                $("#city").attr("href", url);
 
-                    jQuery.ajax({
-                        url: url,
-                        timeout: 5000,
-                        dataType: 'json',
-                        success: function (data) {
-                            var options;
-                            $.each(data, function (bb) {
-                                options += '<option value="' + data[bb].id + '">'  +   data[bb].name + '</option>';
-                                });
-                                  $("#app_ad_form_district").html(options);
+                jQuery.ajax({
+                    url: url,
+                    timeout: 5000,
+                    dataType: 'json',
+                    success: function (data) {
+                        var options;
+                        $.each(data, function (bb) {
+                            options += '<option value="' + data[bb].id + '">' + data[bb].name + '</option>';
+                        });
+                        $("#app_ad_form_district").html(options);
 
-                                           },
-                                           error: function () {
-                                               alert('mal');
-                                           }
-                                       });
+                    },
+                    error: function () {
+                        alert('mal');
+                    }
+                });
 
-                                   });
+            });
 
-                               });
+        });
 
     </script>
 {% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block sidebar %}
+        {% for category in categories %}
+        <a href="{{path("category",{'id': category.id})}}">{{category.name}}</a><br>
+    {% endfor %}
+{% endblock %}

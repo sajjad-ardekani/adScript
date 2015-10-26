@@ -4,6 +4,20 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    appbundle.upload_listener:
+        class: AppBundle\EventListener\UploadListener
+        arguments: [@doctrine.orm.entity_manager]
+        tags:
+            - { name: 'kernel.event_listener', event: oneup_uploader.post_persist, method: onUpload }
+           
+    myCompany.form.flow.createVehicle:
+        class: AppBundle\Form\CreateVehicleFlow
+        parent: craue.form.flow
+        scope: request
+        
+#        
+#    listener.requestresponse:
+#        class: AppBundle\EventListener\UploadListener
+#        tags:
+#         - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest  }
+#         - { name: kernel.event_listener, event: kernel.response, method: onUpload }

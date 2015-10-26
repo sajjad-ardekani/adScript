@@ -9,3 +9,6 @@ show-district:
     defaults: { _controller: "AppBundle:Ad:showDistrict", format: html }
     requirements:
         format: json    
+oneup_uploader:
+    resource: .
+    type: uploader        
