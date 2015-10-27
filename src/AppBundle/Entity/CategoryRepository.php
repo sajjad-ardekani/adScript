@@ -14,8 +14,29 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository {
         $qb = $this->createQueryBuilder('c')
                 ->select('c')
                 ->addOrderBy('c.id', 'DESC');
+        return $qb->getQuery()
+                        ->getResult();
+    }
 
+    public function queryOwnedBy($catId) {
+        $qb = $this->createQueryBuilder('c')
+                ->select('c')
+                ->where('c.parent = :cat_id')
+                ->setParameter('cat_id', $catId);
+        return $qb->getQuery()
+                        ->getArrayResult();
+    }
 
+    public function queryGetCategory(Category $parent = null) {
+        $qb = $this->createQueryBuilder('c')
+                ->select('c')
+                ->orderBy('c.name', 'ASC');
+        if (is_null($parent)) {
+            $qb->andWhere('c.parent IS NULL');
+        } else {
+            $qb->andWhere('c.parent = :parent')
+                    ->setParameter('parent', $parent->getId());
+        }
         return $qb->getQuery()
                         ->getResult();
     }

@@ -8,7 +8,12 @@ show-district:
     pattern:  /{id}/district.{format}
     defaults: { _controller: "AppBundle:Ad:showDistrict", format: html }
     requirements:
-        format: json    
+        format: json   
+show-sub-category:
+    pattern:  /{id}/sub-category.{format}
+    defaults: { _controller: "AppBundle:Ad:showSubCategory", format: html }
+    requirements:
+        format: json         
 oneup_uploader:
     resource: .
     type: uploader        

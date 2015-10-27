@@ -19,6 +19,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class AdFormType extends AbstractType {
 
+    public function __construct($em) {
+        $this->em = $em;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $builder
@@ -27,7 +31,18 @@ class AdFormType extends AbstractType {
                 ->add("city")
                 ->add('district')
                 ->add("price")
-                ->add("categories")
+               ->add("categories")
+//                , 'entity', array(
+//                    'class' => 'AppBundle:Category',
+//                    'property' => 'name',
+//                    'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
+//                        return $er->createQueryBuilder('e')
+//                                ->where('e.parent is NULL');
+////                                ->setParameter('parent_id', null);
+//                    }
+////                    ,
+////                    'data' => $this->em->getReference("AppBundle:Category", 2)
+//                ))
                 ->add("email")
                 ->add("phonenumber")
 

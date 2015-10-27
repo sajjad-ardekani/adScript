@@ -1,22 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <a href="{{path('new-ad')}}">Add Ad</a>
     {% for ad in ads %}
         <a href="{{path("details",{'id': ad.id})}}">{{ad.title}}</a><br>
         {{ad.district}}<br>
 
-        {%for image in ad.images%}
+        {%for image in ad.images|slice(0, 1)%}
             <img src="{{asset('uploads/gallery/' ~ image.filename)}}" style="width:150px;height: 150px;"/>
         {%endfor%}<br>
         تومان {{ad.price}}<br>
         {{ad.creationDate|date('Y-m-d H:i:s') }}
 
-
+        <hr>
     {% endfor %}
 {% endblock %}
-        {% block sidebar %}
-        {% render controller('AppBundle:Default:sidebar') %}
-        {% endblock %}
+{% block sidebar %}
+    {% render controller('AppBundle:Default:sidebar') %}
+{% endblock %}
 {% block javascripts %}{% endblock %}
 
 {% block stylesheets %}

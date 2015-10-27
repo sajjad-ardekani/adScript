@@ -18,9 +18,10 @@ class AdController extends Controller {
      */
     public function newAction(Request $request) {
         $ad = new Ad();
-
-        $form = $this->createForm(new AdFormType(), $ad);
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new AdFormType($this->getDoctrine()->getManager()), $ad);
         $user = $this->container->get('security.context')->getToken()->getUser();
+        $categories = $em->getRepository("AppBundle:Category")->queryGetCategory();
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -33,7 +34,8 @@ class AdController extends Controller {
             return $this->redirectToRoute("upload", ["id" => $ad->getId()]);
         }
         return $this->render('ad/new_ad.html.twig', array(
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'categories' => $categories
         ));
     }
 
@@ -49,6 +51,21 @@ class AdController extends Controller {
         }
         return $this->render('Ad/ajaxload.html.twig', array(
                     'dis' => $district
+        ));
+    }
+    
+        public function showSubCategoryAction($id, $format, Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $sub_category = $em->getRepository("AppBundle:Category")->queryOwnedBy($id);
+        
+        if ($format == 'json') {
+            $response = new \Symfony\Component\HttpFoundation\JsonResponse($sub_category);
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
+        return $this->render('Ad/ajaxload.html.twig', array(
+                    'dis' => $sub_category
         ));
     }
 
@@ -84,7 +101,7 @@ class AdController extends Controller {
      */
     public function editAction($ad, Request $request) {
 //        $this->enforceOwnerSecurity($ad);  SECURITY
-        $form = $this->createForm(new AdFormType(), $ad);
+        $form = $this->createForm(new AdFormType($this->getDoctrine()->getManager()), $ad);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -96,6 +113,19 @@ class AdController extends Controller {
         return $this->render('ad/edit-ad.html.twig', array(
                     "form" => $form->createView(),
                     "ad" => $ad));
+    }
+    
+        /**
+     * @Route("/delete-ad/{id}", name="delete_ad")
+     * @ParamConverter("ad", class="AppBundle:Ad")
+     */
+    public function deleteAdAction($ad, Request $request) {
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($ad);
+        $em->flush();
+        
+        return $this->redirectToRoute("homepage");
     }
 
     /**

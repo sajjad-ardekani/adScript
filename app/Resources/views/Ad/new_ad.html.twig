@@ -5,11 +5,15 @@
 
     {{form_widget(form)}}<br>
 
+    <select id="app_ad_form_suc_category">
+        {%for category in categories %}
 
+            <option value="{{category.id}}">{{category.name}}</option>
+
+        {% endfor %}
+    </select>
     <input type="submit" value="Add">
     {{ form_end(form) }}
-
-    <p></p>
 {% endblock %}
 
 
@@ -58,28 +62,52 @@
                 var value = jQuery("#app_ad_form_city").val();
                 var url = "{{ path('show-district', {'id': 'cityId','format':'json'}) }}";
                 url = url.replace("cityId", value);
-                $("#city").attr("href", url);
+        {#$("#city").attr("href", url);#}
 
-                jQuery.ajax({
-                    url: url,
-                    timeout: 5000,
-                    dataType: 'json',
-                    success: function (data) {
-                        var options;
-                        $.each(data, function (bb) {
-                            options += '<option value="' + data[bb].id + '">' + data[bb].name + '</option>';
-                        });
-                        $("#app_ad_form_district").html(options);
+                    jQuery.ajax({
+                        url: url,
+                        timeout: 5000,
+                        dataType: 'json',
+                        success: function (data) {
+                            var options;
+                            $.each(data, function (bb) {
+                                options += '<option value="' + data[bb].id + '">' + data[bb].name + '</option>';
+                            });
+                            $("#app_ad_form_district").html(options);
+                        },
+                        error: function () {
+                            alert('mal');
+                        }
+                    });
 
-                    },
-                    error: function () {
-                        alert('mal');
-                    }
+                });
+
+
+                jQuery("#app_ad_form_suc_category").change(function () {
+
+                    var value = jQuery("#app_ad_form_suc_category").val();
+                    var url = "{{ path('show-sub-category', {'id': 'catId','format':'json'}) }}";
+                    url = url.replace("catId", value);
+                    jQuery.ajax({
+                        url: url,
+                        timeout: 5000,
+                        dataType: 'json',
+                        success: function (data) {
+                            var options;
+                            $.each(data, function (bb) {
+                                options += '<option value="' + data[bb].id + '">' + data[bb].name + '</option>';
+                            });
+                            $("#app_ad_form_categories").html(options);
+
+                        },
+                        error: function () {
+                            alert('mal');
+                        }
+                    });
+
                 });
 
             });
-
-        });
 
     </script>
 {% endblock %}

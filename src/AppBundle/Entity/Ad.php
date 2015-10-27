@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Ad
@@ -98,7 +99,7 @@ class Ad {
     private $city;
 
     /**
-     * @ORM\OneToMany(targetEntity="Image", mappedBy="ad")
+     * @ORM\OneToMany(targetEntity="Image", mappedBy="ad", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $images;
 
@@ -432,4 +433,13 @@ class Ad {
     public function getDistrict() {
         return $this->district;
     }
+
+    public function getSlug() {
+        return $this->slug;
+    }
+
+    public function setSlug($slug) {
+        $this->slug = $slug;
+    }
+
 }

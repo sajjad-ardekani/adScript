@@ -51,7 +51,7 @@ class Category {
         } else {
             $s = "";
         }
-        return $s . $this->name;
+        return  $s . $this->name;
     }
 
     public function __construct() {
