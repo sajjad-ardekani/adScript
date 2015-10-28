@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <a href="{{path('new-ad')}}">Add Ad</a>
+    <a href="{{path('new-ad')}}">Add Ad</a><br>
     {% for ad in ads %}
         <a href="{{path("details",{'id': ad.id})}}">{{ad.title}}</a><br>
         {{ad.district}}<br>

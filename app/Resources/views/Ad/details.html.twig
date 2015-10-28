@@ -8,9 +8,10 @@
         <a href="{{path('delete_ad',{'id':ad.id})}}">Delete</a>
     {% endif %}
     <br>
-    {{ad.title}}<br>
-    {{ad.district}}<br>
-    {{ad.description}}
+    عنوان : {{ad.title}}<br>
+    محله: {{ad.district}}<br>
+   توضیح: {{ad.description}}<br>
+     دسته بندی: {{ad.categories.name}}<br>
     {%for image in ad.images%}
         <img src="{{asset('uploads/gallery/' ~ image.filename)}}" style="width:150px;height: 150px;"/>
     {%endfor%}<br>

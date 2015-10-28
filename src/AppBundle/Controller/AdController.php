@@ -18,11 +18,11 @@ class AdController extends Controller {
      */
     public function newAction(Request $request) {
         $ad = new Ad();
+        
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new AdFormType($this->getDoctrine()->getManager()), $ad);
         $user = $this->container->get('security.context')->getToken()->getUser();
         $categories = $em->getRepository("AppBundle:Category")->queryGetCategory();
-
         $form->handleRequest($request);
         if ($form->isValid()) {
             $ad->setUser($this->getUser());
@@ -88,7 +88,8 @@ class AdController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $ad = $em->getRepository("AppBundle:Ad")->find($id);
         $user = $this->container->get('security.context')->getToken()->getUser();
-
+//        var_dump($ad->getCategories()->getName());
+//        die;
         return $this->render('ad/details.html.twig', array(
                     "ad" => $ad,
                     "user" => $user));
