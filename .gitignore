@@ -10,3 +10,5 @@
 /vendor/
 /web/bundles/
 /nbproject/private/
+/web/uploads/gallery/
+!app/uploads/gallery/.gitkeep

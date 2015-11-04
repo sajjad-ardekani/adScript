@@ -45,6 +45,13 @@ class Category {
      * */
     private $parent;
 
+    /**
+     * @var string
+     *
+     * @ORM\OneToMany(targetEntity="Type", mappedBy="category")
+     */
+    private $types;
+
     public function __toString() {
         if ($this->parent) {
             $s = "--";
@@ -57,6 +64,7 @@ class Category {
     public function __construct() {
         $this->ads = new ArrayCollection();
         $this->sub_category = new ArrayCollection();
+        $this->types = new ArrayCollection();
     }
 
     /**
@@ -174,4 +182,37 @@ class Category {
         return $this->parent;
     }
 
+    /**
+     * Add type
+     *
+     * @param \AppBundle\Entity\Type $type
+     *
+     * @return Category
+     */
+    public function addType(\AppBundle\Entity\Type $type)
+    {
+        $this->types[] = $type;
+
+        return $this;
+    }
+
+    /**
+     * Remove type
+     *
+     * @param \AppBundle\Entity\Type $type
+     */
+    public function removeType(\AppBundle\Entity\Type $type)
+    {
+        $this->types->removeElement($type);
+    }
+
+    /**
+     * Get types
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypes()
+    {
+        return $this->types;
+    }
 }

@@ -86,3 +86,7 @@ oneup_uploader:
     mappings:
         gallery:
             frontend: fineuploader
+            use_orphanage: true
+    orphanage:
+        maxage: 86400
+        directory: %kernel.cache_dir%/uploader/orphanage

@@ -103,18 +103,7 @@
     <script type="text/javascript" src="{{asset('fine-uploader/jquery.fine-uploader.js')}}"></script>
 
     <script type="text/javascript">
-        {#  $(document).ready(function () {
-          var uploader = new qq.FineUploader(
-          {
-          element: document.getElementById('fine-fileupload'),
-                  request: {
-                  endpoint: "{{ oneup_uploader_endpoint('gallery') }}",
-                          params: {
-                          gallery: "{{ gallery.id }}"
-                          }
-                  }
-          });#}
-
+        
               $(document).ready(function ()
               {
                   var uploader = new qq.FineUploader({
