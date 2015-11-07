@@ -33,7 +33,6 @@
         <span class="qq-btn qq-retry-icon" aria-label="Retry"></span>
         Retry
         </button>
-
         <div class="qq-file-info">
         <div class="qq-file-name">
         <span class="qq-upload-file-selector qq-upload-file"></span>
@@ -53,14 +52,12 @@
         </div>
         </li>
         </ul>
-
         <dialog class="qq-alert-dialog-selector">
         <div class="qq-dialog-message-selector"></div>
         <div class="qq-dialog-buttons">
         <button type="button" class="qq-cancel-button-selector">Close</button>
         </div>
         </dialog>
-
         <dialog class="qq-confirm-dialog-selector">
         <div class="qq-dialog-message-selector"></div>
         <div class="qq-dialog-buttons">
@@ -68,7 +65,6 @@
         <button type="button" class="qq-ok-button-selector">Yes</button>
         </div>
         </dialog>
-
         <dialog class="qq-prompt-dialog-selector">
         <div class="qq-dialog-message-selector"></div>
         <input type="text">
@@ -101,7 +97,7 @@
     <select id="app_ad_form_3_category">
 
     </select>
-    <input type="submit" id="test" value="Add">
+    <input type="button" id="test" value="Add">
     {{ form_end(form) }}
     <div id="property"></div>
     <div id="uploader"></div>
@@ -114,7 +110,6 @@
     {{parent()}}
     <link href="{{asset('fine-uploader/fine-uploader-gallery.css')}}" rel="stylesheet">
     <style>
-
         body { background: #F5F5F5; font: 18px/1.5 sans-serif; }
         h1, h2 { line-height: 1.2; margin: 0 0 .5em; }
         h1 { font-size: 36px; }
@@ -129,12 +124,10 @@
         #welcome h1 span { display: block; font-size: 75%; }
         #icon-status, #icon-book { float: left; height: 64px; margin-right: 1em; margin-top: -4px; width: 64px; }
         #icon-book { display: none; }
-
         @media (min-width: 768px) {
             #wrapper { width: 80%; margin: 2em auto; }
             #icon-book { display: inline-block; }
             #status a, #next a { display: block; }
-
             @-webkit-keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
             @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
             .sf-toolbar { opacity: 0; -webkit-animation: fade-in 1s .2s forwards; animation: fade-in 1s .2s forwards;}
@@ -148,9 +141,7 @@
 
     <script>
         jQuery(document).ready(function () {
-
             jQuery("#app_ad_form_city").change(function () {
-
                 var value = jQuery("#app_ad_form_city").val();
                 var url = "{{ path('show-district', {'id': 'cityId','format':'json'}) }}";
                 url = url.replace("cityId", value);
@@ -171,7 +162,6 @@
                 });
             });
             jQuery("#app_ad_form_1_category").change(function () {
-
                 var value = jQuery("#app_ad_form_1_category").val();
                 var url = "{{ path('show-sub-category', {'id': 'catId','format':'json'}) }}";
                 url = url.replace("catId", value);
@@ -182,7 +172,6 @@
                     success: function (data) {
                         var options;
                         $.each(data, function (bb) {
-
                             options += '<option value="' + data[bb].id + '">' + data[bb].name + '</option>';
                         });
                         $("#app_ad_form_2_category").html(options);
@@ -192,10 +181,8 @@
                     }
                 });
             }
-
             );
             jQuery("#app_ad_form_2_category").change(function () {
-
                 var value = jQuery("#app_ad_form_2_category").val();
                 var url = "{{ path('show-sub-category', {'id': 'catId','format':'json'}) }}";
                 url = url.replace("catId", value);
@@ -204,10 +191,8 @@
                     timeout: 5000,
                     dataType: 'json',
                     success: function (data) {
-
                         var options;
                         $.each(data, function (bb) {
-
                             if (data[bb].id) {
                                 options += '<option value="' + data[bb].id + '">' + data[bb].name + '</option>';
                                 $("#app_ad_form_categories").val(value);
@@ -235,13 +220,11 @@
                         if (data) {
                             $("#property").html(data);
         {# $("#test").click(function () {
-
              $('[id^=form_prop_]').each(function () {
                  alert(this.value);
              });
          });#}
                              }
-
                          },
                          error: function () {
                              alert('mal');
@@ -258,40 +241,52 @@
                          }
                      }
                  });
-
                  $("#test").click(function () {
-
-
                      var myObj = [];
-                     $('[id^=form_prop_]').each(function () {
 
+                     var title = $('#app_ad_form_title').val();
+                     var description = $('#app_ad_form_description').val();
+                     var city = $('#app_ad_form_city').val();
+                     var district = $('#app_ad_form_district').val();
+                     var price = $('#app_ad_form_price').val();
+                     var categories = $('#app_ad_form_categories').val();
+                     var email = $('#app_ad_form_email').val();
+                     var phonenumber = $('#app_ad_form_phonenumber').val();
+
+                     var myAd = {
+                         'title': title,
+                         'description': description,
+                         'city': city,
+                         'district': district,
+                         'price': price,
+                         'categories': categories,
+                         'email': email,
+                         'phonenumber': phonenumber
+                     };
+
+
+
+                     $('[id^=form_prop_]').each(function () {
                          var name = $(this).attr("name");
                          var value = $(this).val();
                          var items = {
                              'name': name,
                              'value': value
                          };
-
                          myObj.push(items);
-
                      });
-                     var json = JSON.stringify(myObj);
+
+
+                     var json_property = JSON.stringify(myObj);
+                     var json_ad = JSON.stringify(myAd);
+
                      var url = "{{path("demo")}}";
-
-        {#$.post(url, arr);#}
-
-                    jQuery.ajax({
-                        url: url,
-                        timeout: 5000,
-                        data: {a:json},
-                        contentType: "application/json",
-                        success: function (data) {
-                            alert(data);
-                        }
-                    });
-                });
-
-            });
-
+                     $.post(url, {ad: json_ad, property: json_property}, function (data) {
+                         var url = '{{path("details",{'id':'ad_id'})}}';
+                         url = url.replace("ad_id", data);
+                         window.location = url;
+                     });
+                 });
+             });
     </script>
 {% endblock %}

@@ -4,7 +4,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Ad;
 use AppBundle\Entity\Image;
+use AppBundle\Entity\IntegerValue;
 use AppBundle\Form\AdFormType;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,25 +18,29 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class AdController extends Controller {
 
     /**
-     * @Route("/demo", name="demo")
+     * @Route("/demo", name="demo",requirements={"_method" = "POST"})
      */
     public function demoAction(Request $request) {
-        $ad = new Ad();
-        $value = new \AppBundle\Entity\IntegerValue();
         $em = $this->getDoctrine()->getManager();
-        $req = $request->get('a');
-        $reqArr = json_decode($req);
+        $ad = new Ad();
 
-        foreach ($reqArr as $val) {
 
-            $value->setValue($val->value);
-            $value->setAd($ad);
-            $value->setType($value);
-            $em->persist($value);
+
+        $this->setDataAd($request, $em, $ad);
+
+
+        $manager = $this->get('oneup_uploader.orphanage_manager')->get('gallery');
+        $files = $manager->uploadFiles();
+        foreach ($files as $file) {
+            $image = new Image();
+            $image->setFilename($file->getfileName());
+            $em->persist($image);
+            $image->setAd($ad);
         }
+        $em->persist($ad);
         $em->flush();
 
-        return $this->redirectToRoute("new-ad");
+        return new Response($ad->getId());
     }
 
     /**
@@ -42,28 +48,12 @@ class AdController extends Controller {
      */
     public function newAction(Request $request) {
         $ad = new Ad();
+
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new AdFormType($this->getDoctrine()->getManager()), $ad);
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        $categories = $em->getRepository("AppBundle:Category")->queryGetCategory();
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $manager = $this->get('oneup_uploader.orphanage_manager')->get('gallery');
-            $files = $manager->uploadFiles();
-            foreach ($files as $file) {
-                $image = new Image();
-                $image->setFilename($file->getfileName());
-                $em->persist($image);
-                $image->setAd($ad);
-            }
-            $ad->setUser($this->getUser());
-            $ad->setUser($user);
-            $em->persist($form->getData());
-            $em->flush();
 
-            return $this->redirectToRoute("app-property-category", ['id' => $ad->getCategories()->getId(), 'adId' => $ad->getId()]);
-        }
+        $categories = $em->getRepository("AppBundle:Category")->queryGetCategory();
+
         return $this->render('ad/new_ad.html.twig', array(
                     'form' => $form->createView(),
                     'categories' => $categories
@@ -122,6 +112,7 @@ class AdController extends Controller {
     public function editAction($ad, Request $request) {
 //        $this->enforceOwnerSecurity($ad);  SECURITY
         $form = $this->createForm(new AdFormType($this->getDoctrine()->getManager()), $ad);
+        
         $form->handleRequest($request);
         if ($form->isValid()) {
 
@@ -208,7 +199,7 @@ class AdController extends Controller {
                     $formBuilder->add("prop_" . $type->getId(), $fieldType, ['label' => $type->getName()]);
                     break;
                 case "enum":
-                    $fieldType = "choise";
+                    $fieldType = "choice";
                     $formBuilder->add("prop_" . $type->getId(), $fieldType, [
                         'label' => $type->getName(),
                         "choices" => array_combine($type->getOptions(), $type->getOptions())
@@ -217,35 +208,7 @@ class AdController extends Controller {
             }
         }
         $form = $formBuilder->getForm();
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $data = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $ad = $em->getRepository("AppBundle:Ad")->find($adId);
-            foreach ($data as $k => $v) {
-                list(, $id) = explode("_", $k);
-                $type = $this->getDoctrine()->getRepository("AppBundle:Type")->find($id);
 
-                switch ($type->getType()) {
-                    case 'string':
-                        $value = new \AppBundle\Entity\StringValue();
-                        break;
-                    case 'integer':
-                        $value = new \AppBundle\Entity\IntegerValue();
-                        break;
-//                    case 'enum':
-//                        $value = new \AppBundle\Entity\EnumValue();
-//                        break;
-                    default :
-                        throw new \Exception;
-                }
-                $value->setAd($ad);
-                $value->setType($type);
-                $value->setValue($v);
-                $em->persist($value);
-            }
-            $em->flush();
-        }
         return $this->render("category/form.html.twig", array("form" => $form->createView())
         );
     }
@@ -289,8 +252,56 @@ class AdController extends Controller {
                     "category" => $category,
                     "result" => $result,
 //                    "result2" => $result2
-                )
-                );
+                        )
+        );
+    }
+
+    private function setDataAd(Request $request, EntityManager $em, Ad $ad) {
+
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $json_ad = $request->get('ad');
+        $json_decode_ad = json_decode($json_ad);
+
+        $city = $em->getRepository("AppBundle:City")->find($json_decode_ad->city);
+        $district = $em->getRepository("AppBundle:District")->find($json_decode_ad->district);
+        $category = $em->getRepository("AppBundle:Category")->find($json_decode_ad->categories);
+        $ad->setTitle($json_decode_ad->title);
+        $ad->setDescription($json_decode_ad->description);
+        $ad->setPrice($json_decode_ad->price);
+        $ad->setCity($city);
+        $ad->setDistrict($district);
+        $ad->setCategories($category);
+        $ad->setEmail($json_decode_ad->email);
+        $ad->setPhonenumber($json_decode_ad->phonenumber);
+        $ad->setUser($user);
+
+        $json_property = $request->get('property');
+        $json_decode_property = json_decode($json_property);
+
+
+        foreach ($json_decode_property as $val) {
+
+            $type_id = substr($val->name, -2, 1);
+            $type = $em->getRepository("AppBundle:Type")->find($type_id);
+
+            switch ($type->getType()) {
+                case 'string':
+                    $value = new \AppBundle\Entity\StringValue();
+                    break;
+                case 'integer':
+                    $value = new \AppBundle\Entity\IntegerValue();
+                    break;
+                case 'enum':
+                    $value = new \AppBundle\Entity\EnumValue();
+                    break;
+                default :
+                    throw new \Exception;
+            }
+            $value->setAd($ad);
+            $value->setType($type);
+            $em->persist($value);
+            $value->setValue($val->value);
+        }
     }
 
     private function enforceOwnerSecurity(Ad $event) {
