@@ -29,4 +29,54 @@ class AdRepository extends \Doctrine\ORM\EntityRepository {
                         ->getResult();
     }
 
+    public function getAdsApproved($limit, $status = true) {
+
+        $qb = $this->createQueryBuilder('c')
+                ->select('c')
+                ->addOrderBy('c.id', 'DESC');
+
+        if (false === is_null($status)) {
+            $qb->andWhere('c.status = :approved')
+                    ->setParameter('approved', $status);
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb->getQuery()
+                        ->getResult();
+    }
+
+    public function getAdsNotApproved($status = false) {
+        $qb = $this->createQueryBuilder('c')
+                ->select('c')
+                ->addOrderBy('c.id', 'DESC');
+
+        if (false === is_null($status)){
+            $qb->andWhere('c.status = :approved')
+                    ->setParameter('approved', $status);
+        }
+
+        return $qb->getQuery()
+                        ->getResult();
+    }
+        public function findAllAdWaitingForPayment ($status = 2) {
+        $qb = $this->createQueryBuilder('c')
+                ->select('c')
+                ->Where('c.status = :status')
+                ->setParameter('status', $status)
+                ->addOrderBy('c.id', 'DESC')
+                ;
+        return $qb->getQuery()
+                        ->getResult();
+    }
+            public function findAllAdsDenied ($status = 3) {
+        $qb = $this->createQueryBuilder('c')
+                ->select('c')
+                ->Where('c.status = :status')
+                ->setParameter('status', $status)
+                ->addOrderBy('c.id', 'DESC')
+                ;
+        return $qb->getQuery()
+                        ->getResult();
+    }
+
 }

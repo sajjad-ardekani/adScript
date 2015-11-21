@@ -11,7 +11,10 @@
     {% for val in result %}
         <a href="{{val.ad.id}}">{{val.ad.title}}</a><br>
     {% endfor %}
-{#    {% for val in result2 %}
-        <a href="{{val.ad.id}}">{{val.ad.name}}</a><br>
-    {% endfor %}#}
+    {% for val in result2 %}
+        <a href="{{val.ad.id}}">{{val.ad.title}}</a><br>
+    {% endfor %}
+    {% for val in result3 %}
+        <a href="{{val.ad.id}}">{{val.ad.title}}</a><br>
+    {% endfor %}
 {% endblock body %}

@@ -1,4 +1,6 @@
 {{form_start(form)}}
 {{form_widget(form)}}
-
 {{form_end(form)}}
+{% if category.free == 1 %}
+    ارسال آگهی در این موضوع رایگان نیست. <a href="">لیست تعرفه ها</a>
+    {%endif%}

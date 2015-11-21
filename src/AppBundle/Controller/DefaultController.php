@@ -13,7 +13,8 @@ class DefaultController extends Controller {
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $ads = $em->getRepository("AppBundle:Ad")->getAdsForBlog();
+        $a = 10;
+        $ads = $em->getRepository("AppBundle:Ad")->getAdsApproved($a);
         $images = $em->getRepository("AppBundle:Image")->findAll();
         return $this->render('default/index.html.twig', array("ads" => $ads, "images" => $images));
     }

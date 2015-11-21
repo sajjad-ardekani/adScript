@@ -71,7 +71,14 @@ class Ad {
      *
      * @ORM\Column(name="status", type="integer")
      */
-    private $status = 1;
+    private $status = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="view", type="integer")
+     */
+    private $view = 0;
 
     /**
      * @var boolean
@@ -111,6 +118,17 @@ class Ad {
     private $numberOfWheels;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Payment", inversedBy="ad")
+     * @ORM\JoinColumn(name="payment_id", referencedColumnName="id")
+     */
+    private $payment;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AdDenied", mappedBy="ad", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $ad_denied;
+
+    /**
      * Get numberOfWheels
      *
      * @return integer
@@ -121,6 +139,7 @@ class Ad {
 
     public function __construct() {
         $this->images = new ArrayCollection();
+        $this->ad_denied = new ArrayCollection();
     }
 
     /**
@@ -272,6 +291,7 @@ class Ad {
      * @return Ad
      */
     public function setStatus($status) {
+
         $this->status = $status;
 
         return $this;
@@ -442,4 +462,82 @@ class Ad {
         $this->slug = $slug;
     }
 
+    /**
+     * Set view
+     *
+     * @param integer $view
+     *
+     * @return Ad
+     */
+    public function setView($view) {
+        $this->view = $view;
+
+        return $this;
+    }
+
+    /**
+     * Get view
+     *
+     * @return integer
+     */
+    public function getView() {
+        return $this->view;
+    }
+
+    /**
+     * Set payment
+     *
+     * @param \AppBundle\Entity\Payment $payment
+     *
+     * @return Ad
+     */
+    public function setPayment(\AppBundle\Entity\Payment $payment = null) {
+        $this->payment = $payment;
+
+        return $this;
+    }
+
+    /**
+     * Get payment
+     *
+     * @return \AppBundle\Entity\Payment
+     */
+    public function getPayment() {
+        return $this->payment;
+    }
+
+
+    /**
+     * Add adDenied
+     *
+     * @param \AppBundle\Entity\AdDenied $adDenied
+     *
+     * @return Ad
+     */
+    public function addAdDenied(\AppBundle\Entity\AdDenied $adDenied)
+    {
+        $this->ad_denied[] = $adDenied;
+
+        return $this;
+    }
+
+    /**
+     * Remove adDenied
+     *
+     * @param \AppBundle\Entity\AdDenied $adDenied
+     */
+    public function removeAdDenied(\AppBundle\Entity\AdDenied $adDenied)
+    {
+        $this->ad_denied->removeElement($adDenied);
+    }
+
+    /**
+     * Get adDenied
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAdDenied()
+    {
+        return $this->ad_denied;
+    }
 }

@@ -27,6 +27,7 @@ class StringValue {
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="Ad")
+     * @ORM\JoinColumn(name="ad_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $ad;
     /**

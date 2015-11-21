@@ -1,7 +1,4 @@
 {% extends 'base.html.twig' %}
-
-
-
 {% block metablock %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
 {% endblock %}
@@ -80,7 +77,7 @@
     </script>
 
 {% endblock %}
-{% block body %}    
+{% block body %}
     {{ form_start(form) }}
     {{form_widget(form)}}<br>
 
@@ -236,21 +233,8 @@
                          params: {
                              id: 1
                          }
-                     },
-                     deleteFile: {
-                         enabled: true,
-                         method: "POST",
-                         endpoint: ""
-                     },
-                     callbacks: {
-                         onComplete: function (id, name, response) {
-
-                         }
                      }
                  });
-                
-
-
                  $("#test").click(function () {
                      var myObj = [];
 

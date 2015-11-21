@@ -25,7 +25,8 @@ class EnumValue {
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Type")
+     * @ORM\ManyToOne(targetEntity="Type",cascade={"remove"})
+     * 
      */
     private $type;
 
@@ -33,6 +34,7 @@ class EnumValue {
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="Ad")
+     * @ORM\JoinColumn(name="ad_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $ad;
 
@@ -44,14 +46,12 @@ class EnumValue {
      */
     private $value;
 
-
     /**
      * Get id
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -62,8 +62,7 @@ class EnumValue {
      *
      * @return IntegerValue
      */
-    public function setValue($value)
-    {
+    public function setValue($value) {
         $this->value = $value;
 
         return $this;
@@ -74,8 +73,7 @@ class EnumValue {
      *
      * @return integer
      */
-    public function getValue()
-    {
+    public function getValue() {
         return $this->value;
     }
 
@@ -86,8 +84,7 @@ class EnumValue {
      *
      * @return IntegerValue
      */
-    public function setType(\AppBundle\Entity\Type $type = null)
-    {
+    public function setType(\AppBundle\Entity\Type $type = null) {
         $this->type = $type;
 
         return $this;
@@ -98,8 +95,7 @@ class EnumValue {
      *
      * @return \AppBundle\Entity\Type
      */
-    public function getType()
-    {
+    public function getType() {
         return $this->type;
     }
 
@@ -110,8 +106,7 @@ class EnumValue {
      *
      * @return IntegerValue
      */
-    public function setAd(\AppBundle\Entity\Ad $ad = null)
-    {
+    public function setAd(\AppBundle\Entity\Ad $ad = null) {
         $this->ad = $ad;
 
         return $this;
@@ -122,8 +117,8 @@ class EnumValue {
      *
      * @return \AppBundle\Entity\Ad
      */
-    public function getAd()
-    {
+    public function getAd() {
         return $this->ad;
     }
+
 }

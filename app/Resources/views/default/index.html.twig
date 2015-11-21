@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+   
     <a href="{{path('new-ad')}}">Add Ad</a><br>
     {% for ad in ads %}
+         {% if ad.status ==1  %}
         <a href="{{path("details",{'id': ad.id})}}">{{ad.title}}</a><br>
         {{ad.district}}<br>
 
@@ -13,7 +15,10 @@
         {{ad.creationDate|date('Y-m-d H:i:s') }}
 
         <hr>
+        {% endif%}
     {% endfor %}
+    
+    
 {% endblock %}
 {% block sidebar %}
     {% render controller('AppBundle:Default:sidebar') %}

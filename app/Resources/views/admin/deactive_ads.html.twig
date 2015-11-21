@@ -1,0 +1,11 @@
+<a href="{{path("dashboard")}}">back</a><br>
+{%for ad in ads%}
+    {{ad.title}}
+    تاریخ: {{ad.creationDate|date('Y-m-d H:i:s') }}
+    نام کاربری: {{ad.user}}<br>
+    {{ad.report}}
+    <a href="{{path("active_ad",{'id':ad.id})}}">Active Ad</a>
+    <a href="{{path("denied_ad",{'id':ad.id})}}">رد آگهی</a>
+    {{ad.status}}
+    <hr>
+{%endfor%}

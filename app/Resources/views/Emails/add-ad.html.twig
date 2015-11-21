@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <div><p>لحظاتی پیش یک آگهی‌ با این نشانی ایمیل بر روی دیوار ثبت شده است. آدرس ایمیل شما تأیید شده است. تأیید نهایی آگهی ممکن است کمی زمان ببرد.
+شما می‌توانید با فشار دکمهٔ پایین آگهی خود را مدیریت کرده و یا در صورت نیاز عملیات پرداخت را انجام دهید. </p></div>
+        <h1>{{ad.title}}</h1>
+        <h3>{{ad.description}}</h3>
+        {%for image in ad.images%}
+            <img src="{{asset('uploads/gallery/' ~ image.filename)}}" style="width:100px;height: 100px;"/>
+        {%endfor%}<br>
+        <a href="http://localhost{{path("ad_details_user",{'id': ad.id})}}">مدریت آگهی</a><br>
+    </body>
+</html>

@@ -1,45 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-    <a href="{{path('homepage')}}">Back</a>
-     {% if app.user and app.user.id == ad.user.id %}
-            --
-            <a href="{{path('edit-ad',{'id':ad.id})}}">Edit</a>--
-            <a href="{{path('delete_ad',{'id':ad.id})}}">Delete</a>
-        {% endif %}
-    {% if ad.status == 0 or ad.status == 2%}
-        آگهی شما تایید نشده
-    {%else%}
-
-        <br>
-        عنوان : {{ad.title}}<br>
-        محله: {{ad.district}}<br>
-        شهر: {{ad.city}}<br>
-        توضیح: {{ad.description}}<br>
-        دسته بندی: {{ad.categories.name}}<br>
-        تعداد بازدید: {{ad.view}}<br>
-        {%for image in ad.images%}
-            <img src="{{asset('uploads/gallery/' ~ image.filename)}}" style="width:150px;height: 150px;"/>
-        {%endfor%}<br>
-        تومان {{ad.price}}<br>
-        تاریخ: {{ad.creationDate|date('Y-m-d H:i:s') }}<br>
-        شماره تماس: {{ad.phonenumber}}<br>
-        {% if value is defined %}
-            {% for val in value%}
-                {{val.type.name}}:
-                {{val.value}}<br>
-            {%endfor%}
-        {% endif %}
-    {%endif%}
-    <hr>
-
-
-
-
-
+    REF ID:{{au}}<br>
+  <a href="http://localhost{{path("ad_details_user",{'id': ad.id})}}">مدریت آگهی</a><br>
 {% endblock %}
-{% block javascripts %}{% endblock %}
 
 {% block stylesheets %}
     <style>
@@ -68,4 +32,6 @@
             .sf-toolbar { opacity: 0; -webkit-animation: fade-in 1s .2s forwards; animation: fade-in 1s .2s forwards;}
         }
     </style>
+{% endblock %}
+{% block javascripts %}
 {% endblock %}

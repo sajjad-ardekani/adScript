@@ -1,0 +1,9 @@
+<a href="{{path("dashboard")}}">back</a><br>
+{%for user in users%}
+    {{user.username}}
+    تاریخ: {{user.lastlogin|date('Y-m-d H:i:s') }}
+    نام کاربری: {{user.email}}<br>
+    {{user.enabled}}
+    <a href="{{path("useractive",{'id':user.id})}}">Enable User</a>
+    <hr>
+{%endfor%}

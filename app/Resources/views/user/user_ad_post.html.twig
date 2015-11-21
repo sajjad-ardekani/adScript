@@ -1,0 +1,8 @@
+<a href="{{path("fos_user_profile")}}">Back</a><br>
+{%for ad in ads%}
+    {% if ad.status == 1 %}
+        <a href="{{path("ad_details_user",{'id': ad.id})}}" style="color: #759e1a">{{ad.title}}</a><br>
+    {%else%}
+        <a href="{{path("ad_details_user",{'id': ad.id})}}" style="color: #CC0000">{{ad.title}}</a><br>
+    {%endif%}
+{%endfor%}

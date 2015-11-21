@@ -52,13 +52,20 @@ class Category {
      */
     private $types;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="free", type="boolean")
+     */
+    private $free = 1;
+
     public function __toString() {
         if ($this->parent) {
             $s = "--";
         } else {
             $s = "";
         }
-        return  $s . $this->name;
+        return $s . $this->name;
     }
 
     public function __construct() {
@@ -189,8 +196,7 @@ class Category {
      *
      * @return Category
      */
-    public function addType(\AppBundle\Entity\Type $type)
-    {
+    public function addType(\AppBundle\Entity\Type $type) {
         $this->types[] = $type;
 
         return $this;
@@ -201,8 +207,7 @@ class Category {
      *
      * @param \AppBundle\Entity\Type $type
      */
-    public function removeType(\AppBundle\Entity\Type $type)
-    {
+    public function removeType(\AppBundle\Entity\Type $type) {
         $this->types->removeElement($type);
     }
 
@@ -211,8 +216,32 @@ class Category {
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getTypes()
-    {
+    public function getTypes() {
         return $this->types;
+    }
+
+
+    /**
+     * Set free
+     *
+     * @param boolean $free
+     *
+     * @return Category
+     */
+    public function setFree($free)
+    {
+        $this->free = $free;
+
+        return $this;
+    }
+
+    /**
+     * Get free
+     *
+     * @return boolean
+     */
+    public function getFree()
+    {
+        return $this->free;
     }
 }
